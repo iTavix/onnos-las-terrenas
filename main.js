@@ -145,7 +145,7 @@
   const nav = $('#nav'), progress = $('#progress'), hero = $('.hero'), heroContent = $('.hero__content');
   const marquee = $('#marquee'), dn = $('#daynight'), dnTrack = $('#dnTrack'), dnBar = $('#dnBar');
   const parallax = fine ? $$('[data-speed]') : [];
-  const navLinks = $$('.nav__links a');
+  const navLinks = $$('.nav__links > a');
   const sections = navLinks.map(a => $(a.getAttribute('href')));
   let M = {};
   const docTop = el => el.getBoundingClientRect().top + scrollY;
@@ -176,7 +176,9 @@
     lenis.stop();
     $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
       const t = $(a.getAttribute('href')); if (!t) return;
-      e.preventDefault(); document.body.classList.remove('menu-open'); lenis.scrollTo(t, { offset: 0 });
+      e.preventDefault();
+      if (document.body.classList.contains('menu-open')) { document.body.classList.remove('menu-open'); document.documentElement.style.overflow = ''; lenis.start(); }
+      lenis.scrollTo(t, { offset: 0 });
     }));
   }
 
@@ -234,8 +236,17 @@
   requestAnimationFrame(frame);
 
   /* ---------------- mobile menu ---------------- */
-  $('#burger').addEventListener('click', () => document.body.classList.toggle('menu-open'));
-  navLinks.forEach(a => a.addEventListener('click', () => document.body.classList.remove('menu-open')));
+  const setMenu = on => {
+    document.body.classList.toggle('menu-open', on);
+    document.documentElement.style.overflow = on ? 'hidden' : '';
+    $('#burger').setAttribute('aria-expanded', on);
+    if (window.__lenis) on ? window.__lenis.stop() : window.__lenis.start();
+    if (on) setNavHidden(false);
+  };
+  $('#burger').addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
+  navLinks.forEach(a => a.addEventListener('click', () => setMenu(false)));
+  addEventListener('keydown', e => { if (e.key === 'Escape' && document.body.classList.contains('menu-open')) setMenu(false); });
+  matchMedia('(min-width: 961px)').addEventListener('change', e => { if (e.matches) setMenu(false); });
 
   /* ---------------- gallery filters ---------------- */
   $$('#filters button').forEach(b => b.addEventListener('click', () => {
