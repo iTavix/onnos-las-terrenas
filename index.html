@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 
@@ -37,6 +37,7 @@
     <a href="#kitchen" data-i18n="nav.kitchen">Kitchen</a>
     <a href="#bar" data-i18n="nav.bar">Bar</a>
     <a href="#nights" data-i18n="nav.nights">Nights</a>
+    <a href="#events" data-i18n="nav.events">What's on</a>
     <a href="#gallery" data-i18n="nav.gallery">Gallery</a>
     <a href="#visit" data-i18n="nav.visit">Visit</a>
   </nav>
@@ -69,7 +70,7 @@
         <span class="line"><span class="word">Dance.</span></span>
       </h1>
       <div class="hero__meta">
-        <p data-i18n="hero.meta">Right on the beach in the heart of Las Terrenas, Samaná.<br>Open every day, 10am – 2am.</p>
+        <p data-i18n="hero.meta">Right on the beach in the heart of Las Terrenas, Samaná.<br>Open every day, from coffee to last call.</p>
         <a href="#story" class="scroll-cue"><span data-i18n="hero.scroll">Scroll</span><i></i></a>
       </div>
     </div>
@@ -79,8 +80,8 @@
   <!-- MARQUEE -->
   <div class="marquee" aria-hidden="true">
     <div class="marquee__track" id="marquee">
-      <span>Tacos &amp; Tequila Tuesdays</span><b>✺</b><span>Sunset Sessions</span><b>✺</b><span>Feet in the sand</span><b>✺</b><span>International DJs</span><b>✺</b><span>Open 10am – 2am</span><b>✺</b>
-      <span>Tacos &amp; Tequila Tuesdays</span><b>✺</b><span>Sunset Sessions</span><b>✺</b><span>Feet in the sand</span><b>✺</b><span>International DJs</span><b>✺</b><span>Open 10am – 2am</span><b>✺</b>
+      <span>Tacos &amp; Tequila Tuesdays</span><b>✺</b><span>Sunset Sessions</span><b>✺</b><span>Feet in the sand</span><b>✺</b><span>International DJs</span><b>✺</b><span>Sunset Hour 5 – 6pm</span><b>✺</b>
+      <span>Tacos &amp; Tequila Tuesdays</span><b>✺</b><span>Sunset Sessions</span><b>✺</b><span>Feet in the sand</span><b>✺</b><span>International DJs</span><b>✺</b><span>Sunset Hour 5 – 6pm</span><b>✺</b>
     </div>
   </div>
 
@@ -92,7 +93,7 @@
         <h2 class="display reveal" data-i18n-html="story.title">The newest beachfront <em>hotspot</em> in the Dominican Republic.</h2>
         <p class="lead reveal" data-i18n="story.p1">Located right on the beach in the heart of the village, Onno's Las Terrenas is the place to unwind, eat, drink and dance. Tapas, Tex-Mex and Asian fusion with craft cocktails — feet in the sand.</p>
         <div class="stats reveal">
-          <div><strong data-count="16">0</strong><span data-i18n="stats.hours">hours open, every day</span></div>
+          <div><strong data-count="7">0</strong><span data-i18n="stats.hours">days a week, sun to stars</span></div>
           <div><strong data-count="10">0</strong><span data-i18n="stats.locations">Onno's across the island</span></div>
           <div><strong>∞</strong><span data-i18n="stats.sunsets">sunsets on the sand</span></div>
         </div>
@@ -138,7 +139,7 @@
           <div class="dn-card__img"><img src="thumb/05.jpg" alt="Packed dance floor with lights"></div>
           <span class="dn-card__time">23:00</span>
           <h3 data-i18n="day.c5t">Late night</h3>
-          <p data-i18n="day.c5">The beach turns into a dance floor. Until 2am.</p>
+          <p data-i18n="day.c5">The beach turns into a dance floor. Until 2am, 3am on weekends.</p>
         </article>
       </div>
       <div class="daynight__bar"><i id="dnBar"></i></div>
@@ -211,12 +212,38 @@
     </div>
   </section>
 
+  <!-- WHAT'S ON -->
+  <section class="events section" id="events">
+    <div class="wrap">
+      <div class="events__head">
+        <div>
+          <p class="eyebrow reveal" data-i18n="ev.eyebrow">06 — What's on</p>
+          <h2 class="display reveal" data-i18n-html="ev.title">Every day, <em>a reason.</em></h2>
+        </div>
+        <div class="sunset-hour reveal">
+          <span class="sunset-hour__dot"></span>
+          <div>
+            <strong>Sunset Hour · 5 – 6pm</strong>
+            <span data-i18n="ev.sunsetHour">Every day — special prices on selected drinks</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="days reveal" id="days" role="tablist" aria-label="Weekly program"></div>
+
+      <div class="event" id="event">
+        <div class="event__posters" id="evPosters"></div>
+        <div class="event__info" id="evInfo"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- GALLERY -->
   <section class="gallery section" id="gallery">
     <div class="wrap">
       <div class="gallery__head">
         <div>
-          <p class="eyebrow reveal" data-i18n="gal.eyebrow">06 — Gallery</p>
+          <p class="eyebrow reveal" data-i18n="gal.eyebrow">07 — Gallery</p>
           <h2 class="display reveal" data-i18n-html="gal.title">Moments <em>at Onno's.</em></h2>
         </div>
         <div class="filters reveal" id="filters">
@@ -235,11 +262,11 @@
   <section class="visit section" id="visit" data-theme="dark">
     <div class="wrap visit__grid">
       <div>
-        <p class="eyebrow reveal" data-i18n="visit.eyebrow">07 — Visit us</p>
+        <p class="eyebrow reveal" data-i18n="visit.eyebrow">08 — Visit us</p>
         <h2 class="display display--xl reveal" data-i18n-html="visit.title">See you <em>on the sand.</em></h2>
         <dl class="info reveal">
           <div><dt data-i18n="visit.where">Where</dt><dd><a href="https://maps.app.goo.gl/CM9FZL3xjiwwNBnK6" target="_blank" rel="noopener">Calle Libertad, Cibao Nordeste<br>Las Terrenas, Samaná — DR</a></dd></div>
-          <div><dt data-i18n="visit.hours">Hours</dt><dd data-i18n="visit.hoursv">Every day<br>10am – 2am</dd></div>
+          <div><dt data-i18n="visit.hours">Hours</dt><dd data-i18n="visit.hoursv">Sun – Thu 10am – 2am<br>Fri – Sat 10am – 3am<br><small>Mondays from 4pm</small></dd></div>
           <div><dt data-i18n="visit.call">Call</dt><dd><a href="tel:+18093306821">+1 809 330 6821</a></dd></div>
           <div><dt data-i18n="visit.follow">Follow</dt><dd><a href="https://www.instagram.com/onnosterrenas/" target="_blank" rel="noopener">@onnosterrenas</a></dd></div>
         </dl>
@@ -298,6 +325,6 @@
 </div>
 
 <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
-<script src="main.js?v=4"></script>
+<script src="main.js?v=5"></script>
 </body>
 </html>

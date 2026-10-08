@@ -29,21 +29,22 @@
 
   /* ---------------- i18n ---------------- */
   const es = {
-    'nav.story': 'Historia', 'nav.kitchen': 'Cocina', 'nav.bar': 'Bar', 'nav.nights': 'Noches', 'nav.gallery': 'Galería', 'nav.visit': 'Visítanos',
+    'nav.story': 'Historia', 'nav.kitchen': 'Cocina', 'nav.bar': 'Bar', 'nav.nights': 'Noches', 'nav.gallery': 'Galería', 'nav.visit': 'Visítanos', 'nav.events': 'Agenda',
+    'ev.eyebrow': '06 — Agenda', 'ev.title': 'Cada día, <em>una excusa.</em>', 'ev.sunsetHour': 'Todos los días — precios especiales en bebidas seleccionadas',
     'cta.reserve': 'Reservar', 'cta.menu': 'Ver el menú', 'cta.reserveWa': 'Reservar por WhatsApp',
     'hero.eyebrow': 'Beach club · Restaurante · Vida nocturna',
-    'hero.meta': 'En plena playa, en el corazón de Las Terrenas, Samaná.<br>Abierto todos los días, 10am – 2am.',
+    'hero.meta': 'En plena playa, en el corazón de Las Terrenas, Samaná.<br>Abierto todos los días, del café a la última ronda.',
     'hero.scroll': 'Desliza',
     'story.eyebrow': '01 — El lugar',
     'story.title': 'El nuevo <em>hotspot</em> frente al mar de República Dominicana.',
     'story.p1': 'En plena playa, en el corazón del pueblo, Onno\'s Las Terrenas es EL lugar para relajarse, comer, beber y bailar. Tapas, Tex-Mex y fusión asiática con cócteles de autor — con los pies en la arena.',
-    'stats.hours': 'horas abiertos, todos los días', 'stats.locations': 'Onno\'s en la isla', 'stats.sunsets': 'atardeceres en la arena',
+    'stats.hours': 'días a la semana, del sol a las estrellas', 'stats.locations': 'Onno\'s en la isla', 'stats.sunsets': 'atardeceres en la arena',
     'day.eyebrow': '02 — Un día en Onno\'s', 'day.title': 'Del café de la mañana <em>a la última ronda.</em>',
     'day.c1t': 'Café de la mañana', 'day.c1': 'El bar abre sobre la arena, el mar aún en calma.',
     'day.c2t': 'Días de playa', 'day.c2': 'Puffs, agua turquesa y algo bien frío.',
     'day.c3t': 'Sunset Sessions', 'day.c3': 'DJs internacionales mientras el cielo se vuelve rosa.',
     'day.c4t': 'Cena', 'day.c4': 'Tapas, sushi y tacos bajo las lámparas.',
-    'day.c5t': 'De madrugada', 'day.c5': 'La playa se convierte en pista de baile. Hasta las 2am.',
+    'day.c5t': 'De madrugada', 'day.c5': 'La playa se convierte en pista de baile. Hasta las 2am, las 3am los fines de semana.',
     'kitchen.eyebrow': '03 — La cocina', 'kitchen.title': 'Tapas, Tex-Mex <em>y fusión asiática.</em>',
     'kitchen.p': 'Platos para compartir, desde nigiri fresco hasta sartenes chisporroteantes. Para comer sin prisa, con el mar a pocos pasos.',
     'tue.eyebrow': 'Todos los martes', 'tue.margs': 'Margaritas a',
@@ -51,20 +52,24 @@
     'bar.p': 'Menta fresca, ron local, tequila y un bartender que recuerda tu nombre. Mojitos al mediodía, spritz al atardecer, shots después de medianoche.',
     'nights.eyebrow': '05 — Las noches', 'nights.title': 'Cuando la playa se vuelve <em>pista de baile.</em>',
     'nights.p': 'Sunset Sessions con DJs internacionales, luego la cena, luego la fiesta. Bolas de discoteca, láseres y el sonido de las olas detrás del bajo.',
-    'gal.eyebrow': '06 — Galería', 'gal.title': 'Momentos <em>en Onno\'s.</em>',
+    'gal.eyebrow': '07 — Galería', 'gal.title': 'Momentos <em>en Onno\'s.</em>',
     'gal.all': 'Todo', 'gal.beach': 'Playa', 'gal.food': 'Comida', 'gal.drinks': 'Bebidas', 'gal.nights': 'Noches',
-    'visit.eyebrow': '07 — Visítanos', 'visit.title': 'Nos vemos <em>en la arena.</em>',
-    'visit.where': 'Dónde', 'visit.hours': 'Horario', 'visit.hoursv': 'Todos los días<br>10am – 2am', 'visit.call': 'Llama', 'visit.follow': 'Síguenos',
+    'visit.eyebrow': '08 — Visítanos', 'visit.title': 'Nos vemos <em>en la arena.</em>',
+    'visit.where': 'Dónde', 'visit.hours': 'Horario', 'visit.hoursv': 'Dom – Jue 10am – 2am<br>Vie – Sáb 10am – 3am<br><small>Lunes desde las 4pm</small>', 'visit.call': 'Llama', 'visit.follow': 'Síguenos',
     'foot.other': 'Otras ubicaciones', 'foot.more': 'Más', 'foot.feedback': 'Comentarios', 'foot.team': 'Trabaja con nosotros'
   };
   const en = {};
   $$('[data-i18n]').forEach(el => en[el.dataset.i18n] = el.innerHTML);
   $$('[data-i18n-html]').forEach(el => en[el.dataset.i18nHtml] = el.innerHTML);
+  let curLang = 'en';
+  const onLang = [];
   const setLang = lang => {
+    curLang = lang;
     const d = lang === 'es' ? es : en;
     $$('[data-i18n]').forEach(el => { const v = d[el.dataset.i18n]; if (v) el.innerHTML = v; });
     $$('[data-i18n-html]').forEach(el => { const v = d[el.dataset.i18nHtml]; if (v) el.innerHTML = v; });
     document.documentElement.lang = lang;
+    onLang.forEach(fn => fn(lang));
     $$('.lang button').forEach(b => b.classList.toggle('is-active', b.dataset.lang === lang));
     try { localStorage.setItem('onnos-lang', lang); } catch (e) {}
   };
@@ -250,20 +255,22 @@
   const show = i => {
     li = (i + list.length) % list.length;
     lbImg.classList.remove('is-in');
-    const n = list[li];
     const img = new Image();
-    img.onload = () => { lbImg.src = img.src; lbImg.alt = `Onno's Las Terrenas photo ${n}`; requestAnimationFrame(() => lbImg.classList.add('is-in')); };
-    img.src = `img/${pad(n)}.jpg`;
+    img.onload = () => { lbImg.src = img.src; lbImg.alt = `Onno's Las Terrenas — ${li + 1}`; requestAnimationFrame(() => lbImg.classList.add('is-in')); };
+    img.src = list[li];
     lbCount.textContent = `${pad(li + 1)} / ${pad(list.length)}`;
   };
-  const open = n => {
-    list = $$('.tile:not(.is-out)').map(t => +t.dataset.n);
+  const open = (srcs, start = 0) => {
+    list = srcs;
     lb.classList.add('is-open'); lb.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden'; if (window.__lenis) window.__lenis.stop();
-    show(list.indexOf(n));
+    show(start);
   };
   const close = () => { lb.classList.remove('is-open'); lb.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; if (window.__lenis) window.__lenis.start(); };
-  masonry.addEventListener('click', e => { const t = e.target.closest('.tile'); if (t) open(+t.dataset.n); });
+  masonry.addEventListener('click', e => { const t = e.target.closest('.tile'); if (!t) return;
+    const tiles = $$('.tile:not(.is-out)');
+    open(tiles.map(x => `img/${pad(+x.dataset.n)}.jpg`), tiles.indexOf(t));
+  });
   $('#lbClose').addEventListener('click', close);
   $('#lbPrev').addEventListener('click', () => show(li - 1));
   $('#lbNext').addEventListener('click', () => show(li + 1));
@@ -283,6 +290,95 @@
     sx = null;
   });
 
+  /* ---------------- what's on ---------------- */
+  // Programma settimanale ricavato dai volantini di Onno's Las Terrenas.
+  const T = { sunset: { en: 'Sunset', es: 'Atardecer' }, night: { en: 'Night', es: 'Noche' }, day: { en: 'Daytime', es: 'De día' } };
+  const week = [
+    { k: 'sun', en: 'Sunday', es: 'Domingo', hours: '10am – 2am', posters: ['img/eventi/daytime-session.jpg'], events: [
+      { name: 'Daytime Session', time: T.day, lineup: ["Francesca Faggella (Gloss 'n Glitter)"] },
+      { name: 'Sunset', time: T.sunset, lineup: ['Yendruy Aquinx'] },
+      { name: 'Sunday Vibes', time: T.night, lineup: ['XO Musik'] }] },
+    { k: 'mon', en: 'Monday', es: 'Lunes', hours: '4pm – 2am', posters: ['thumb/19.jpg'], photo: true, events: [
+      { name: 'Sunset Hour', time: { en: '5 – 6pm', es: '5 – 6pm' }, text: { en: 'Doors open at 4pm. Watch the sun go down with special prices on selected drinks.', es: 'Abrimos a las 4pm. Mira la puesta de sol con precios especiales en bebidas seleccionadas.' } }] },
+    { k: 'tue', en: 'Tuesday', es: 'Martes', hours: '10am – 2am', posters: ['img/13.jpg'], photo: true, events: [
+      { name: 'Tacos & Tequila Tuesday', time: { en: 'All day', es: 'Todo el día' }, text: { en: 'Street tacos and margaritas at $199. A legend at every Onno\'s.', es: 'Tacos callejeros y margaritas a $199. Una leyenda en cada Onno\'s.' } }] },
+    { k: 'wed', en: 'Wednesday', es: 'Miércoles', hours: '10am – 2am', posters: ['img/eventi/lets-smash.jpg', 'img/eventi/midweek-rhythms.jpg'], events: [
+      { name: "Let's Smash", time: { en: 'From 11am', es: 'Desde las 11am' }, text: { en: 'Smash burgers $499 with fries or fried yuca, 2×1 Corona Cero. Classic Oklahoma, Jalapeño, Caramelized Onion, Bacon Cheeseburger, Shroom.', es: 'Smash burgers a $499 con papas o yuca frita, 2×1 de Corona Cero. Classic Oklahoma, Jalapeño, Caramelized Onion, Bacon Cheeseburger, Shroom.' } },
+      { name: 'Midweek Rhythms', time: T.sunset, lineup: ['Yendruy Aquinx', 'Chrisoprasa'] }] },
+    { k: 'thu', en: 'Thursday', es: 'Jueves', hours: '10am – 2am', posters: ['img/eventi/sunset-session.jpg'], events: [
+      { name: 'Sunset Session', time: T.sunset, lineup: ['Yendruy Aquinx'] },
+      { name: 'Soulful Thursdays', time: T.night, lineup: ['XO Musik'] }] },
+    { k: 'fri', en: 'Friday', es: 'Viernes', hours: '10am – 3am', posters: ['thumb/06.jpg'], photo: true, events: [
+      { name: 'Sunset Hour', time: { en: '5 – 6pm', es: '5 – 6pm' }, text: { en: 'Special prices at sunset, then the party runs until 3am.', es: 'Precios especiales al atardecer, luego la fiesta sigue hasta las 3am.' } }] },
+    { k: 'sat', en: 'Saturday', es: 'Sábado', hours: '10am – 3am', posters: ['img/eventi/saturday-sunset.jpg'], events: [
+      { name: 'Saturday Sunset', time: T.sunset, lineup: ['Chrisoprasa'] },
+      { name: "Onno's Boiler Room", time: T.night, lineup: ['XO Musik', 'Julio Rosario'] }] }
+  ];
+  const weekOrder = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+  let todayKey = 'sun';
+  try { todayKey = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Santo_Domingo', weekday: 'short' }).format(new Date()).slice(0, 3).toLowerCase(); } catch (e) {}
+  const daysEl = $('#days'), postersEl = $('#evPosters'), infoEl = $('#evInfo');
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  let activeKey = todayKey;
+
+  const renderDays = () => {
+    daysEl.innerHTML = weekOrder.map(k => {
+      const d = week.find(x => x.k === k);
+      const label = d[curLang].slice(0, 3);
+      return `<button role="tab" data-k="${k}" aria-selected="${k === activeKey}" class="${k === activeKey ? 'is-active' : ''}">
+        <span>${label}</span>${k === todayKey ? `<i>${curLang === 'es' ? 'Hoy' : 'Today'}</i>` : ''}</button>`;
+    }).join('');
+  };
+
+  const renderDay = (animate = true) => {
+    const d = week.find(x => x.k === activeKey);
+    const L = curLang;
+    const posters = d.posters.map((src, i) => `<button class="poster${d.photo ? ' poster--photo' : ''}" data-i="${i}" style="--i:${i};--n:${d.posters.length}" aria-label="${L === 'es' ? 'Ver cartel' : 'View flyer'}"><img src="${src}" alt="${esc(d.events[i] ? d.events[i].name : d.events[0].name)} — Onno's Las Terrenas"></button>`).join('');
+    const events = d.events.map(ev => `
+      <li class="ev">
+        <span class="ev__time">${esc(ev.time[L])}</span>
+        <h4 class="ev__name">${esc(ev.name)}</h4>
+        ${ev.lineup ? `<p class="ev__line"><small>DJ lineup</small>${ev.lineup.map(esc).join(' · ')}</p>` : ''}
+        ${ev.text ? `<p class="ev__text">${esc(ev.text[L])}</p>` : ''}
+      </li>`).join('');
+    const wa = `https://wa.me/18093306821?text=${encodeURIComponent(`Hi! I'd like to book a table at Onno's Las Terrenas for ${d.en}.`)}`;
+    const html = `
+      <p class="event__day">${d[L]}${d.k === todayKey ? ` <em>— ${L === 'es' ? 'hoy' : 'tonight'}</em>` : ''}</p>
+      <p class="event__hours">${L === 'es' ? 'Abierto' : 'Open'} ${d.hours}</p>
+      <ul class="ev-list">${events}</ul>
+      <a class="btn magnetic" href="${wa}" target="_blank" rel="noopener">${L === 'es' ? 'Reservar mesa' : 'Book a table'}</a>`;
+    const swap = () => {
+      postersEl.innerHTML = posters; infoEl.innerHTML = html;
+      postersEl.dataset.n = d.posters.length;
+      requestAnimationFrame(() => requestAnimationFrame(() => { postersEl.classList.remove('is-out'); infoEl.classList.remove('is-out'); }));
+    };
+    if (animate && !reduce) {
+      postersEl.classList.add('is-out'); infoEl.classList.add('is-out');
+      setTimeout(swap, 380);
+    } else swap();
+  };
+
+  daysEl.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b || b.dataset.k === activeKey) return;
+    activeKey = b.dataset.k; renderDays(); renderDay();
+  });
+  postersEl.addEventListener('click', e => {
+    const b = e.target.closest('.poster'); if (!b) return;
+    const d = week.find(x => x.k === activeKey);
+    open(d.posters.map(p => p.replace(/^thumb\//, 'img/')), +b.dataset.i);
+  });
+  // tilt leggero del volantino seguendo il mouse
+  if (fine && !reduce) {
+    postersEl.addEventListener('mousemove', e => {
+      const r = postersEl.getBoundingClientRect();
+      postersEl.style.setProperty('--rx', ((e.clientY - r.top) / r.height - .5) * -6 + 'deg');
+      postersEl.style.setProperty('--ry', ((e.clientX - r.left) / r.width - .5) * 8 + 'deg');
+    });
+    postersEl.addEventListener('mouseleave', () => { postersEl.style.setProperty('--rx', '0deg'); postersEl.style.setProperty('--ry', '0deg'); });
+  }
+  renderDays(); renderDay(false);
+  onLang.push(() => { renderDays(); renderDay(false); });
+
   /* ---------------- cursor + magnetic ---------------- */
   if (fine && !reduce) {
     const cur = $('#cursor'), label = $('#cursorLabel');
@@ -291,12 +387,11 @@
     const follow = () => { cx += (tx - cx) * .2; cy += (ty - cy) * .2; cur.style.transform = `translate3d(${cx}px,${cy}px,0)`; requestAnimationFrame(follow); };
     follow();
     document.addEventListener('mouseover', e => {
-      const tile = e.target.closest('.tile, .dish, .dn-card');
-      const link = e.target.closest('a, button');
-      cur.classList.toggle('is-view', !!tile);
-      label.textContent = tile ? (tile.classList.contains('tile') ? 'View' : '') : '';
-      if (tile && !tile.classList.contains('tile')) cur.classList.remove('is-view');
-      cur.classList.toggle('is-hover', !tile && !!link || (!!tile && !tile.classList.contains('tile')));
+      const view = e.target.closest('.tile, .poster');
+      const soft = e.target.closest('.dish, .dn-card, a, button');
+      cur.classList.toggle('is-view', !!view);
+      label.textContent = view ? 'View' : '';
+      cur.classList.toggle('is-hover', !view && !!soft);
     });
     $$('.magnetic').forEach(el => {
       el.addEventListener('mousemove', e => {
