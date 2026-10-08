@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Onno's Las Terrenas — Eat. Drink. Dance.</title>
+<meta name="description" content="Onno's Las Terrenas: beach club, tapas, Tex-Mex & Asian fusion, craft cocktails and late-night parties right on the beach in Samaná, Dominican Republic.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- LOADER -->
+<div class="loader" id="loader">
+  <div class="loader__inner">
+    <img class="loader__logo" src="img/logo_onnos.PNG" alt="Onno's" width="640" height="640">
+    <span class="loader__sub">Las Terrenas</span>
+  </div>
+  <span class="loader__count" id="loaderCount">0</span>
+</div>
+
+<div class="progress" id="progress"></div>
+<div class="cursor" id="cursor"><span id="cursorLabel"></span></div>
+
+<!-- NAV -->
+<header class="nav" id="nav">
+  <a href="#top" class="nav__logo"><img src="img/logo_onnos.PNG" alt="Onno's" width="640" height="640"><em>Las Terrenas</em></a>
+  <nav class="nav__links" id="navLinks">
+    <a href="#story" data-i18n="nav.story">Story</a>
+    <a href="#kitchen" data-i18n="nav.kitchen">Kitchen</a>
+    <a href="#bar" data-i18n="nav.bar">Bar</a>
+    <a href="#nights" data-i18n="nav.nights">Nights</a>
+    <a href="#gallery" data-i18n="nav.gallery">Gallery</a>
+    <a href="#visit" data-i18n="nav.visit">Visit</a>
+  </nav>
+  <div class="nav__right">
+    <div class="lang" role="group" aria-label="Language">
+      <button data-lang="en" class="is-active">EN</button><button data-lang="es">ES</button>
+    </div>
+    <a class="btn btn--small magnetic" href="https://wa.me/18093306821?text=Hi!%20I%27d%20like%20to%20make%20a%20reservation%20at%20Onno%27s%20Las%20Terrenas" target="_blank" rel="noopener" data-i18n="cta.reserve">Reserve</a>
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero" data-theme="dark">
+    <div class="hero__media">
+      <img src="img/07.jpg" alt="DJ booth facing a dancing crowd" class="is-active">
+      <img src="img/19.jpg" alt="Beach lounge at sunset">
+      <img src="img/22.jpg" alt="Nigiri platter">
+      <img src="img/02.jpg" alt="DJ and guests under the lanterns">
+    </div>
+    <div class="hero__overlay"></div>
+    <div class="hero__shade"></div>
+    <div class="hero__content">
+      <p class="eyebrow hero__eyebrow"><span data-i18n="hero.eyebrow">Beach club · Dining · Nightlife</span></p>
+      <h1 class="hero__title">
+        <span class="line"><span class="word">Eat.</span></span>
+        <span class="line"><span class="word"><em>Drink.</em></span></span>
+        <span class="line"><span class="word">Dance.</span></span>
+      </h1>
+      <div class="hero__meta">
+        <p data-i18n="hero.meta">Right on the beach in the heart of Las Terrenas, Samaná.<br>Open every day, 10am – 2am.</p>
+        <a href="#story" class="scroll-cue"><span data-i18n="hero.scroll">Scroll</span><i></i></a>
+      </div>
+    </div>
+    <div class="hero__dots" id="heroDots"></div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track" id="marquee">
+      <span>Tacos &amp; Tequila Tuesdays</span><b>✺</b><span>Sunset Sessions</span><b>✺</b><span>Feet in the sand</span><b>✺</b><span>International DJs</span><b>✺</b><span>Open 10am – 2am</span><b>✺</b>
+      <span>Tacos &amp; Tequila Tuesdays</span><b>✺</b><span>Sunset Sessions</span><b>✺</b><span>Feet in the sand</span><b>✺</b><span>International DJs</span><b>✺</b><span>Open 10am – 2am</span><b>✺</b>
+    </div>
+  </div>
+
+  <!-- STORY -->
+  <section class="story section" id="story">
+    <div class="wrap story__grid">
+      <div class="story__text">
+        <p class="eyebrow reveal" data-i18n="story.eyebrow">01 — The place</p>
+        <h2 class="display reveal" data-i18n-html="story.title">The newest beachfront <em>hotspot</em> in the Dominican Republic.</h2>
+        <p class="lead reveal" data-i18n="story.p1">Located right on the beach in the heart of the village, Onno's Las Terrenas is the place to unwind, eat, drink and dance. Tapas, Tex-Mex and Asian fusion with craft cocktails — feet in the sand.</p>
+        <div class="stats reveal">
+          <div><strong data-count="16">0</strong><span data-i18n="stats.hours">hours open, every day</span></div>
+          <div><strong data-count="10">0</strong><span data-i18n="stats.locations">Onno's across the island</span></div>
+          <div><strong>∞</strong><span data-i18n="stats.sunsets">sunsets on the sand</span></div>
+        </div>
+      </div>
+      <figure class="story__img story__img--a img-reveal"><img src="thumb/12.jpg" alt="Guests lounging on the beach" data-speed="-0.06"></figure>
+      <figure class="story__img story__img--b img-reveal"><img src="thumb/11.jpg" alt="Bar seats facing the sea" data-speed="0.08"></figure>
+    </div>
+  </section>
+
+  <!-- DAY TO NIGHT (pinned horizontal) -->
+  <section class="daynight" id="daynight">
+    <div class="daynight__sticky">
+      <div class="daynight__head">
+        <p class="eyebrow" data-i18n="day.eyebrow">02 — A day at Onno's</p>
+        <h2 class="display" data-i18n-html="day.title">From morning coffee <em>to last call.</em></h2>
+      </div>
+      <div class="daynight__track" id="dnTrack">
+        <article class="dn-card">
+          <div class="dn-card__img"><img src="thumb/11.jpg" alt="Bar by the sea in the morning"></div>
+          <span class="dn-card__time">10:00</span>
+          <h3 data-i18n="day.c1t">Morning coffee</h3>
+          <p data-i18n="day.c1">The bar opens on the sand, the sea still quiet.</p>
+        </article>
+        <article class="dn-card">
+          <div class="dn-card__img"><img src="thumb/12.jpg" alt="Guests relaxing on beanbags on the beach"></div>
+          <span class="dn-card__time">14:00</span>
+          <h3 data-i18n="day.c2t">Beach days</h3>
+          <p data-i18n="day.c2">Beanbags, turquoise water and something cold.</p>
+        </article>
+        <article class="dn-card">
+          <div class="dn-card__img"><img src="thumb/19.jpg" alt="Lounge at dusk under the palms"></div>
+          <span class="dn-card__time">18:00</span>
+          <h3 data-i18n="day.c3t">Sunset Sessions</h3>
+          <p data-i18n="day.c3">International DJs as the sky turns pink.</p>
+        </article>
+        <article class="dn-card">
+          <div class="dn-card__img"><img src="thumb/20.jpg" alt="Couple having dinner under the lanterns"></div>
+          <span class="dn-card__time">20:30</span>
+          <h3 data-i18n="day.c4t">Dinner</h3>
+          <p data-i18n="day.c4">Tapas, sushi and tacos under the lanterns.</p>
+        </article>
+        <article class="dn-card">
+          <div class="dn-card__img"><img src="thumb/05.jpg" alt="Packed dance floor with lights"></div>
+          <span class="dn-card__time">23:00</span>
+          <h3 data-i18n="day.c5t">Late night</h3>
+          <p data-i18n="day.c5">The beach turns into a dance floor. Until 2am.</p>
+        </article>
+      </div>
+      <div class="daynight__bar"><i id="dnBar"></i></div>
+    </div>
+  </section>
+
+  <!-- KITCHEN -->
+  <section class="kitchen section" id="kitchen">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow reveal" data-i18n="kitchen.eyebrow">03 — The kitchen</p>
+        <h2 class="display reveal" data-i18n-html="kitchen.title">Tapas, Tex-Mex <em>&amp; Asian fusion.</em></h2>
+        <p class="lead reveal" data-i18n="kitchen.p">Plates made for sharing, from fresh nigiri to sizzling skillets. Made to be eaten slowly, with the sea a few steps away.</p>
+      </div>
+      <div class="dishes">
+        <figure class="dish dish--tall img-reveal"><img src="thumb/22.jpg" alt="Nigiri platter"><figcaption><span>Nigiri &amp; sashimi</span><i>01</i></figcaption></figure>
+        <figure class="dish img-reveal"><img src="thumb/17.jpg" alt="Street tacos"><figcaption><span>Street tacos</span><i>02</i></figcaption></figure>
+        <figure class="dish img-reveal"><img src="thumb/15.jpg" alt="Sizzling skillet"><figcaption><span>Sizzling skillet</span><i>03</i></figcaption></figure>
+        <figure class="dish img-reveal"><img src="thumb/16.jpg" alt="Poke bowl"><figcaption><span>Poke bowl</span><i>04</i></figcaption></figure>
+        <figure class="dish img-reveal"><img src="thumb/18.jpg" alt="Gyoza"><figcaption><span>Gyoza</span><i>05</i></figcaption></figure>
+        <figure class="dish dish--wide img-reveal"><img src="thumb/25.jpg" alt="Sushi rolls"><figcaption><span>Signature rolls</span><i>06</i></figcaption></figure>
+      </div>
+      <div class="center reveal"><a class="btn magnetic" href="https://onnosdr.com/las-terrenas/menu" target="_blank" rel="noopener" data-i18n="cta.menu">View the menu</a></div>
+    </div>
+  </section>
+
+  <!-- TUESDAY FEATURE -->
+  <section class="tuesday" data-theme="dark">
+    <div class="tuesday__img"><img src="img/13.jpg" alt="Tacos & Tequila every Tuesday chalkboard" data-speed="-0.12"></div>
+    <div class="tuesday__content">
+      <p class="eyebrow reveal" data-i18n="tue.eyebrow">Every Tuesday</p>
+      <h2 class="tuesday__title reveal">Tacos <em>&amp;</em><br>Tequila</h2>
+      <p class="tuesday__price reveal"><span data-i18n="tue.margs">Margaritas at</span> <strong>$199</strong></p>
+    </div>
+  </section>
+
+  <!-- BAR -->
+  <section class="bar section" id="bar">
+    <div class="wrap bar__grid">
+      <figure class="bar__main img-reveal"><img src="thumb/26.jpg" alt="Bartender smiling behind the bar" data-speed="-0.05"></figure>
+      <div class="bar__text">
+        <p class="eyebrow reveal" data-i18n="bar.eyebrow">04 — The bar</p>
+        <h2 class="display reveal" data-i18n-html="bar.title">Craft cocktails, <em>feet in the sand.</em></h2>
+        <p class="lead reveal" data-i18n="bar.p">Fresh mint, local rum, tequila and a bartender who remembers your name. Mojitos at noon, spritz at sunset, shots after midnight.</p>
+        <div class="bar__row">
+          <figure class="img-reveal"><img src="thumb/27.jpg" alt="Two mojitos"></figure>
+          <figure class="img-reveal"><img src="thumb/29.jpg" alt="Red spritz at sunset"></figure>
+          <figure class="img-reveal"><img src="thumb/28.jpg" alt="Cocktail under purple lights"></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NIGHTS -->
+  <section class="nights section" id="nights" data-theme="dark">
+    <div class="wrap">
+      <div class="section-head section-head--center">
+        <p class="eyebrow reveal" data-i18n="nights.eyebrow">05 — The nights</p>
+        <h2 class="display display--xl reveal" data-i18n-html="nights.title">When the beach becomes <em>a dance floor.</em></h2>
+      </div>
+      <div class="collage">
+        <figure class="c c1 img-reveal"><img src="thumb/07.jpg" alt="DJ booth and crowd" data-speed="0.04"></figure>
+        <figure class="c c2 img-reveal"><img src="thumb/03.jpg" alt="Toast at the bar" data-speed="-0.1"></figure>
+        <figure class="c c3 img-reveal"><img src="thumb/09.jpg" alt="Smiling guest" data-speed="0.12"></figure>
+        <figure class="c c4 img-reveal"><img src="thumb/30.jpg" alt="DJ turntable" data-speed="-0.06"></figure>
+        <figure class="c c5 img-reveal"><img src="thumb/01.jpg" alt="Hands up under the disco ball" data-speed="0.07"></figure>
+        <figure class="c c6 img-reveal"><img src="thumb/08.jpg" alt="Guest dancing on the bar" data-speed="-0.12"></figure>
+      </div>
+      <p class="lead lead--center reveal" data-i18n="nights.p">Sunset Sessions with international DJs, then dinner, then the party. Disco balls, lasers and the sound of the waves behind the bass.</p>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery section" id="gallery">
+    <div class="wrap">
+      <div class="gallery__head">
+        <div>
+          <p class="eyebrow reveal" data-i18n="gal.eyebrow">06 — Gallery</p>
+          <h2 class="display reveal" data-i18n-html="gal.title">Moments <em>at Onno's.</em></h2>
+        </div>
+        <div class="filters reveal" id="filters">
+          <button class="is-active" data-filter="all" data-i18n="gal.all">All</button>
+          <button data-filter="beach" data-i18n="gal.beach">Beach</button>
+          <button data-filter="food" data-i18n="gal.food">Food</button>
+          <button data-filter="drinks" data-i18n="gal.drinks">Drinks</button>
+          <button data-filter="nights" data-i18n="gal.nights">Nights</button>
+        </div>
+      </div>
+      <div class="masonry" id="masonry"></div>
+    </div>
+  </section>
+
+  <!-- VISIT -->
+  <section class="visit section" id="visit" data-theme="dark">
+    <div class="wrap visit__grid">
+      <div>
+        <p class="eyebrow reveal" data-i18n="visit.eyebrow">07 — Visit us</p>
+        <h2 class="display display--xl reveal" data-i18n-html="visit.title">See you <em>on the sand.</em></h2>
+        <dl class="info reveal">
+          <div><dt data-i18n="visit.where">Where</dt><dd><a href="https://maps.app.goo.gl/CM9FZL3xjiwwNBnK6" target="_blank" rel="noopener">Calle Libertad, Cibao Nordeste<br>Las Terrenas, Samaná — DR</a></dd></div>
+          <div><dt data-i18n="visit.hours">Hours</dt><dd data-i18n="visit.hoursv">Every day<br>10am – 2am</dd></div>
+          <div><dt data-i18n="visit.call">Call</dt><dd><a href="tel:+18093306821">+1 809 330 6821</a></dd></div>
+          <div><dt data-i18n="visit.follow">Follow</dt><dd><a href="https://www.instagram.com/onnosterrenas/" target="_blank" rel="noopener">@onnosterrenas</a></dd></div>
+        </dl>
+        <div class="visit__ctas reveal">
+          <a class="btn btn--light magnetic" href="https://wa.me/18093306821?text=Hi!%20I%27d%20like%20to%20make%20a%20reservation%20at%20Onno%27s%20Las%20Terrenas" target="_blank" rel="noopener" data-i18n="cta.reserveWa">Reserve on WhatsApp</a>
+          <a class="btn btn--ghost magnetic" href="https://onnosdr.com/las-terrenas/menu" target="_blank" rel="noopener" data-i18n="cta.menu">View the menu</a>
+        </div>
+      </div>
+      <div class="map img-reveal">
+        <iframe title="Map of Onno's Las Terrenas" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Onno%27s+Las+Terrenas,+Calle+Libertad,+Las+Terrenas&z=16&output=embed"></iframe>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer" data-theme="dark">
+  <div class="wrap">
+    <img class="footer__logo" src="img/logo_onnos.PNG" alt="Onno's" width="640" height="640" loading="lazy">
+    <p class="footer__big">Eat. <em>Drink.</em> Dance.</p>
+    <div class="footer__cols">
+      <div>
+        <h4 data-i18n="foot.other">Other locations</h4>
+        <ul class="locs">
+          <li><a href="https://onnosdr.com/altos-de-chavon" target="_blank" rel="noopener">Altos de Chavón</a></li>
+          <li><a href="https://onnosdr.com/bayahibe" target="_blank" rel="noopener">Bayahíbe</a></li>
+          <li><a href="https://onnosdr.com/bavaro" target="_blank" rel="noopener">Beachside Bávaro</a></li>
+          <li><a href="https://onnosdr.com/zona-colonial" target="_blank" rel="noopener">Zona Colonial</a></li>
+          <li><a href="https://onnosdr.com/beachside" target="_blank" rel="noopener">Beachside Bayahíbe</a></li>
+          <li><a href="https://onnosdr.com/la-romana" target="_blank" rel="noopener">La Romana</a></li>
+          <li><a href="https://onnosdr.com/playa-nueva-romana" target="_blank" rel="noopener">Playa Nueva Romana</a></li>
+          <li><a href="https://onnosdr.com/higuey" target="_blank" rel="noopener">Higüey</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="foot.more">More</h4>
+        <ul class="locs">
+          <li><a href="https://onnosdr.com/feedback?location=las-terrenas" target="_blank" rel="noopener" data-i18n="foot.feedback">Feedback</a></li>
+          <li><a href="https://onnosdr.com/#careers" target="_blank" rel="noopener" data-i18n="foot.team">Join our team</a></li>
+          <li><a href="https://maps.app.goo.gl/CM9FZL3xjiwwNBnK6" target="_blank" rel="noopener">Google Reviews</a></li>
+          <li><a href="https://onnosdr.com/privacy" target="_blank" rel="noopener">Privacy</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footer__legal">© 2026 Onno's Restaurant Group</p>
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lb__close" id="lbClose" aria-label="Close">✕</button>
+  <button class="lb__nav lb__prev" id="lbPrev" aria-label="Previous">←</button>
+  <figure class="lb__fig"><img id="lbImg" alt=""></figure>
+  <button class="lb__nav lb__next" id="lbNext" aria-label="Next">→</button>
+  <p class="lb__count" id="lbCount"></p>
+</div>
+
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
