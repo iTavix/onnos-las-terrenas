@@ -4,6 +4,14 @@
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
 
+  // Il sito parte sempre dall'intro: niente ripristino della posizione o ancore residue al ricaricamento.
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  scrollTo(0, 0);
+  const toTop = () => { scrollTo(0, 0); if (window.__lenis) window.__lenis.scrollTo(0, { immediate: true, force: true }); };
+  addEventListener('load', toTop);
+  addEventListener('pageshow', toTop);
+
   /* ---------------- gallery data ---------------- */
   const cats = { beach: [11, 12, 13, 19, 20], food: [14, 15, 16, 17, 18, 21, 22, 23, 24, 25], drinks: [26, 27, 28, 29], nights: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 30] };
   const order = [19, 7, 22, 27, 12, 3, 17, 26, 1, 16, 13, 9, 23, 29, 5, 11, 15, 2, 24, 28, 8, 20, 18, 6, 21, 4, 25, 10, 14, 30];
@@ -73,6 +81,7 @@
     if (p < 1) return requestAnimationFrame(tick);
     loader.classList.add('is-done');
     document.body.classList.remove('is-loading');
+    toTop();
     if (window.__lenis) window.__lenis.start();
     setTimeout(() => document.body.classList.add('is-ready'), reduce ? 0 : 1000);
   };
