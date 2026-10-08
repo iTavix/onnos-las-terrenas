@@ -140,9 +140,9 @@ body.menu-open .burger span:last-child { transform: translateY(-3.5px) rotate(-4
 .hero__media img.is-active { opacity: 1; transform: scale(1); }
 .hero__overlay { position: absolute; inset: 0; background: rgba(14,10,22,.42); }
 .hero__shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,8,14,.55) 0%, rgba(10,8,14,0) 35%, rgba(10,8,14,.25) 60%, rgba(10,8,14,.85) 100%); }
-.hero__content { position: absolute; left: var(--gutter); right: var(--gutter); bottom: clamp(32px, 6vw, 72px); }
+.hero__content { position: absolute; left: var(--gutter); right: var(--gutter); bottom: clamp(32px, 6vh, 72px); }
 .hero__eyebrow { color: rgba(244,239,232,.8); }
-.hero__title { font-family: var(--serif); font-weight: 400; font-size: clamp(76px, 15vw, 250px); line-height: .86; letter-spacing: -.035em; }
+.hero__title { font-family: var(--serif); font-weight: 400; font-size: clamp(64px, min(15vw, calc((100svh - 340px) / 2.75)), 250px); line-height: .86; letter-spacing: -.035em; }
 .hero__title .line { display: block; overflow: hidden; padding-bottom: .04em; }
 .hero__title .word { display: inline-block; transform: translateY(105%); transition: transform 1.3s var(--ease); }
 .hero__title .line:nth-child(2) .word { transition-delay: .1s; margin-left: 12vw; }
