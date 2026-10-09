@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=7">
+<link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
 
@@ -32,7 +32,7 @@
 <!-- NAV -->
 <header class="nav" id="nav">
   <a href="#top" class="nav__logo"><img src="img/logo_onnos.PNG" alt="Onno's" width="640" height="640"><em>Las Terrenas</em></a>
-  <nav class="nav__links" id="navLinks">
+  <nav class="nav__links" id="navLinks" data-lenis-prevent>
     <a href="#story" data-i18n="nav.story">Story</a>
     <a href="#kitchen" data-i18n="nav.kitchen">Kitchen</a>
     <a href="#bar" data-i18n="nav.bar">Bar</a>
@@ -163,13 +163,14 @@
         <p class="lead reveal" data-i18n="kitchen.p">Plates made for sharing, from fresh nigiri to sizzling skillets. Made to be eaten slowly, with the sea a few steps away.</p>
       </div>
       <div class="dishes">
-        <figure class="dish dish--tall img-reveal"><img src="thumb/22.jpg" alt="Nigiri platter"><figcaption><span>Nigiri &amp; sashimi</span><i>01</i></figcaption></figure>
-        <figure class="dish img-reveal"><img src="thumb/17.jpg" alt="Street tacos"><figcaption><span>Street tacos</span><i>02</i></figcaption></figure>
-        <figure class="dish img-reveal"><img src="thumb/15.jpg" alt="Sizzling skillet"><figcaption><span>Sizzling skillet</span><i>03</i></figcaption></figure>
-        <figure class="dish img-reveal"><img src="thumb/16.jpg" alt="Poke bowl"><figcaption><span>Poke bowl</span><i>04</i></figcaption></figure>
-        <figure class="dish img-reveal"><img src="thumb/18.jpg" alt="Gyoza"><figcaption><span>Gyoza</span><i>05</i></figcaption></figure>
-        <figure class="dish dish--wide img-reveal"><img src="thumb/25.jpg" alt="Sushi rolls"><figcaption><span>Signature rolls</span><i>06</i></figcaption></figure>
+        <figure class="dish dish--tall img-reveal" data-dish="sushi" tabindex="0" role="button"><img src="thumb/24.jpg" alt="Sushi roll"><figcaption><span>Sushi &amp; rolls</span><i>+</i></figcaption></figure>
+        <figure class="dish img-reveal" data-dish="tacos" tabindex="0" role="button"><img src="thumb/17.jpg" alt="Tacos"><figcaption><span>Tacos</span><i data-price></i></figcaption></figure>
+        <figure class="dish img-reveal" data-dish="fajitas" tabindex="0" role="button"><img src="thumb/15.jpg" alt="Sizzling fajitas"><figcaption><span>Fajitas</span><i data-price></i></figcaption></figure>
+        <figure class="dish img-reveal" data-dish="poke" tabindex="0" role="button"><img src="thumb/16.jpg" alt="Ahi tuna poke bowl"><figcaption><span>Poke bowl</span><i data-price></i></figcaption></figure>
+        <figure class="dish img-reveal" data-dish="potstickers" tabindex="0" role="button"><img src="thumb/18.jpg" alt="Pot stickers"><figcaption><span>Pot stickers</span><i data-price></i></figcaption></figure>
+        <figure class="dish dish--wide img-reveal" data-dish="crispytuna" tabindex="0" role="button"><img src="thumb/14.jpg" alt="Crispy rice tuna"><figcaption><span>Crispy rice tuna</span><i data-price></i></figcaption></figure>
       </div>
+      <p class="dishes__hint reveal" data-i18n="kitchen.hint">Tap a dish to see what's in it and the price.</p>
       <div class="center reveal"><a class="btn magnetic" href="https://onnosdr.com/las-terrenas/menu" target="_blank" rel="noopener" data-i18n="cta.menu">View the menu</a></div>
     </div>
   </section>
@@ -180,7 +181,8 @@
     <div class="tuesday__content">
       <p class="eyebrow reveal" data-i18n="tue.eyebrow">Every Tuesday</p>
       <h2 class="tuesday__title reveal">Tacos <em>&amp;</em><br>Tequila</h2>
-      <p class="tuesday__price reveal"><span data-i18n="tue.margs">Margaritas at</span> <strong>$199</strong></p>
+      <p class="tuesday__price reveal"><span data-i18n="tue.margs">Margaritas at</span> <strong>RD$229</strong></p>
+      <p class="tuesday__when reveal" data-i18n="tue.when">5 – 11pm · Tacos from RD$119</p>
     </div>
   </section>
 
@@ -323,8 +325,25 @@
   </div>
 </footer>
 
+<!-- DISH DETAIL -->
+<div class="dish-modal" id="dishModal" aria-hidden="true" data-lenis-prevent>
+  <div class="dm__backdrop" data-close></div>
+  <article class="dm__panel" role="dialog" aria-modal="true" aria-labelledby="dmName">
+    <figure class="dm__img"><img id="dmImg" alt=""></figure>
+    <div class="dm__body">
+      <button class="dm__close" data-close aria-label="Close">✕</button>
+      <div class="dm__content" id="dmContent"></div>
+      <div class="dm__nav">
+        <button id="dmPrev" aria-label="Previous dish">←</button>
+        <span id="dmCount"></span>
+        <button id="dmNext" aria-label="Next dish">→</button>
+      </div>
+    </div>
+  </article>
+</div>
+
 <!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" aria-hidden="true">
+<div class="lightbox" id="lightbox" aria-hidden="true" data-lenis-prevent>
   <button class="lb__close" id="lbClose" aria-label="Close">✕</button>
   <button class="lb__nav lb__prev" id="lbPrev" aria-label="Previous">←</button>
   <figure class="lb__fig"><img id="lbImg" alt=""></figure>
@@ -333,6 +352,6 @@
 </div>
 
 <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
-<script src="main.js?v=7"></script>
+<script src="main.js?v=10"></script>
 </body>
 </html>

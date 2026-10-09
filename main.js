@@ -47,7 +47,7 @@
     'day.c5t': 'De madrugada', 'day.c5': 'La playa se convierte en pista de baile. Hasta las 2am, las 3am los fines de semana.',
     'kitchen.eyebrow': '03 — La cocina', 'kitchen.title': 'Tapas, Tex-Mex <em>y fusión asiática.</em>',
     'kitchen.p': 'Platos para compartir, desde nigiri fresco hasta sartenes chisporroteantes. Para comer sin prisa, con el mar a pocos pasos.',
-    'tue.eyebrow': 'Todos los martes', 'tue.margs': 'Margaritas a',
+    'tue.eyebrow': 'Todos los martes', 'tue.margs': 'Margaritas a', 'tue.when': '5 – 11pm · Tacos desde RD$119', 'kitchen.hint': 'Toca un plato para ver ingredientes y precio.',
     'bar.eyebrow': '04 — El bar', 'bar.title': 'Cócteles de autor, <em>pies en la arena.</em>',
     'bar.p': 'Menta fresca, ron local, tequila y un bartender que recuerda tu nombre. Mojitos al mediodía, spritz al atardecer, shots después de medianoche.',
     'nights.eyebrow': '05 — Las noches', 'nights.title': 'Cuando la playa se vuelve <em>pista de baile.</em>',
@@ -172,8 +172,6 @@
   let M = {};
   const docTop = el => el.getBoundingClientRect().top + scrollY;
   const measure = () => {
-    parallax.forEach(el => el.style.translate = '');
-    dnTrack.style.transform = '';
     M = {
       vh: innerHeight,
       max: document.documentElement.scrollHeight - innerHeight,
@@ -186,10 +184,15 @@
     };
   };
   measure();
-  addEventListener('resize', measure);
-  addEventListener('load', measure);
-  if (document.fonts) document.fonts.ready.then(measure);
-  new ResizeObserver(measure).observe(document.body);
+  let measureQueued = false;
+  const queueMeasure = () => {
+    if (measureQueued) return; measureQueued = true;
+    requestAnimationFrame(() => { measureQueued = false; measure(); lastY = -1; });
+  };
+  addEventListener('resize', queueMeasure);
+  addEventListener('load', queueMeasure);
+  if (document.fonts) document.fonts.ready.then(queueMeasure);
+  new ResizeObserver(queueMeasure).observe(document.body);
 
   carouselMQ.addEventListener('change', () => {
     carousel = carouselMQ.matches; setCarouselClass();
@@ -218,7 +221,8 @@
 
   // in ascolto sulla finestra: ai bordi della sezione il puntatore puo' essere gia' sopra la sezione vicina
   addEventListener('wheel', e => {
-    if (carousel || Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+    if (carousel || Math.abs(e.deltaX) < 3 || Math.abs(e.deltaX) <= Math.abs(e.deltaY) * 2) return;
+    if (lenis && Math.abs(lenis.velocity) > 6) return;
     const y = lenis ? lenis.scroll : scrollY;
     const start = M.dnTop, end = M.dnTop + M.dnLen, edge = M.vh * .6;
     if (y < start - edge - 4 || y > end + edge + 4) return;
@@ -260,7 +264,7 @@
           if (Math.abs(c) > M.vh + p.h) return;
           p.el.style.translate = `0 ${r2(c * p.s)}px`;
         });
-        if (y < M.vh * 1.2) {
+        if (fine && y < M.vh * 1.2) {
           const hp = Math.min(1, y / M.vh);
           heroContent.style.transform = `translate3d(0,${r2(hp * 120)}px,0)`;
           heroContent.style.opacity = r2(Math.max(0, 1 - hp * 1.2));
@@ -275,9 +279,10 @@
     }
 
     if (!reduce) {
-      mx -= 0.6 + Math.min(14, Math.abs(vel) * .3);
+      mx -= 0.6 + (fine ? Math.min(14, Math.abs(vel) * .3) : 0);
       if (-mx > M.half) mx += M.half;
-      marquee.style.transform = `translate3d(${r2(mx)}px,0,0) skewX(${r2(Math.max(-8, Math.min(8, -vel * .25)))}deg)`;
+      const skew = fine ? r2(Math.max(-8, Math.min(8, -vel * .25))) : 0;
+      marquee.style.transform = `translate3d(${r2(mx)}px,0,0) skewX(${skew}deg)`;
     }
 
     lastY = y;
@@ -351,6 +356,119 @@
     sx = null;
   });
 
+  /* ---------------- dish detail (dal menu PDF) ---------------- */
+  const S = { en: 'Spicy', es: 'Picante' };
+  const dishes = {
+    sushi: { img: 'img/24.jpg', cat: { en: 'Sushi bar', es: 'Barra de sushi' }, name: 'Sushi & rolls',
+      desc: { en: 'Rolls, nigiri and sashimi, prepared fresh to order.', es: 'Rolls, nigiri y sashimi, preparados al momento.' },
+      ask: true },
+    tacos: { img: 'img/17.jpg', cat: { en: 'Tacos · flour or corn tortillas', es: 'Tacos · tortillas de harina o maíz' }, name: 'Tacos',
+      desc: { en: 'Pick your filling. Every taco is made to order.', es: 'Elige tu relleno. Cada taco se prepara al momento.' },
+      variants: [
+        ['Al Pastor', { en: 'Pineapple · Cabbage · Chicharrón', es: 'Piña · Repollo · Chicharrón' }, 399],
+        ['Carne Asada', { en: 'Diablo sauce · Chimichurri · Guacamole', es: 'Salsa diablo · Chimichurri · Guacamole' }, 399],
+        ['Chicken Tinga', { en: 'Cabbage · Guacamole · Cilantro cream', es: 'Repollo · Guacamole · Crema de cilantro' }, 399],
+        ['Pork Belly', { en: 'Sriracha garlic · Cabbage · Cilantro', es: 'Ajo sriracha · Repollo · Cilantro' }, 399, true],
+        ['Quesabirria', { en: 'Onion · Cilantro · 3 tacos · Corn tortillas', es: 'Cebolla · Cilantro · 3 tacos · Tortillas de maíz' }, 399],
+        ['Chicken Teriyaki', { en: 'Cabbage · Teriyaki chicken', es: 'Repollo · Pollo teriyaki' }, 419],
+        ['Diablo Shrimp', { en: 'Diablo sauce · Guacamole · Cabbage', es: 'Salsa diablo · Guacamole · Repollo' }, 449, true],
+        ['Sweet Chili Shrimp', { en: 'Chili aioli · Cabbage · Cilantro', es: 'Chili aioli · Repollo · Cilantro' }, 449],
+        ['Ahi Tuna', { en: '4 tacos · Fresh tuna · Avocado', es: '4 tacos · Atún fresco · Aguacate' }, 539, true]],
+      note: { en: 'Tacos & Tequila Tuesday, 5 – 11pm: tacos from RD$119, margaritas RD$229, taco sampler RD$629.', es: 'Tacos & Tequila Tuesday, 5 – 11pm: tacos desde RD$119, margaritas a RD$229, taco sampler RD$629.' } },
+    fajitas: { img: 'img/15.jpg', cat: { en: 'Mains', es: 'Platos fuertes' }, name: 'Fajitas',
+      desc: { en: 'Served sizzling with guacamole, pico de gallo, sour cream, cheese and refried beans.', es: 'Guacamole · Pico de gallo · Crema agria · Queso · Habichuela refrita.' },
+      variants: [['Chicken', { en: '', es: 'Pollo' }, 699], ['Steak', { en: '', es: 'Res' }, 789], ['Shrimp', { en: '', es: 'Camarones' }, 889]] },
+    poke: { img: 'img/16.jpg', cat: { en: 'Mains', es: 'Platos fuertes' }, name: 'Poke Bowl',
+      desc: { en: 'Rice, pineapple, seaweed, avocado and cucumber.', es: 'Arroz · Piña · Alga · Aguacate · Pepino.' },
+      variants: [['Ahi Tuna', { en: '', es: 'Atún' }, 799], ['Diablo Shrimp', { en: '', es: 'Camarones diablo' }, 719, true], ['Chicken Teriyaki', { en: '', es: 'Pollo teriyaki' }, 699]] },
+    potstickers: { img: 'img/18.jpg', cat: { en: 'Tapas · sharing', es: 'Tapas · para compartir' }, name: 'Pot Stickers',
+      desc: { en: 'Pan-fried pork dumplings.', es: 'Dumplings de cerdo a la plancha.' },
+      variants: [['Classic', { en: 'Sweet spicy soy', es: 'Soya dulce picante' }, 499], ['Red Curry', { en: 'Curry sauce', es: 'Curry' }, 519]] },
+    crispytuna: { img: 'img/14.jpg', cat: { en: 'Tapas · sharing', es: 'Tapas · para compartir' }, name: 'Crispy Rice Tuna', spicy: true,
+      desc: { en: 'Crispy rice bites topped with tuna, soy and aioli.', es: 'Arroz crujiente con atún, soya y aioli.' }, price: 699 }
+  };
+  const dishOrder = $$('.dish[data-dish]').map(d => d.dataset.dish);
+  const fmt = n => 'RD$' + n.toLocaleString('en-US');
+  const minPrice = d => d.price || (d.variants ? Math.min(...d.variants.map(v => v[2])) : null);
+  const setDishPrices = () => $$('.dish[data-dish]').forEach(el => {
+    const d = dishes[el.dataset.dish], i = $('i[data-price]', el); if (!i) return;
+    const p = minPrice(d);
+    i.textContent = d.variants && d.variants.length > 1 ? `${curLang === 'es' ? 'desde' : 'from'} ${fmt(p)}` : fmt(p);
+  });
+  setDishPrices(); onLang.push(setDishPrices);
+
+  const dm = $('#dishModal'), dmImg = $('#dmImg'), dmContent = $('#dmContent'), dmCount = $('#dmCount');
+  let dmKey = null;
+  const dmHTML = key => {
+    const d = dishes[key], L = curLang, es = L === 'es';
+    const spicy = d.spicy ? `<span class="dm__spicy">${S[L]}</span>` : '';
+    let price = '';
+    if (d.price) price = `<p class="dm__price">${fmt(d.price)}${spicy}</p>`;
+    else if (d.variants) price = `<p class="dm__price"><small>${es ? 'desde' : 'from'}</small>${fmt(minPrice(d))}</p>`;
+    const variants = d.variants ? `<ul class="dm__variants">${d.variants.map(([n, sub, p, hot]) =>
+      `<li><div><strong>${esc(n)}${hot ? ` <span class="dm__spicy">${S[L]}</span>` : ''}</strong>${sub[L] ? `<span>${esc(sub[L])}</span>` : ''}</div><b>${p.toLocaleString('en-US')}</b></li>`).join('')}</ul>` : '';
+    const ask = d.ask ? `<p class="dm__note">${es ? 'Pregunta a tu mesero por la selección del día.' : 'Ask your server for today\'s selection.'}</p>` : '';
+    const note = d.note ? `<p class="dm__note">${esc(d.note[L])}</p>` : '';
+    const wa = `https://wa.me/18093306821?text=${encodeURIComponent(`Hi! I'd like to book a table at Onno's Las Terrenas (${d.name}).`)}`;
+    return `<p class="dm__cat">${esc(d.cat[L])}</p>
+      <h3 class="dm__name" id="dmName">${esc(d.name)}</h3>
+      <p class="dm__desc">${esc(d.desc[L])}</p>
+      ${price}${variants}${ask}${note}
+      ${d.ask ? '' : `<p class="dm__tax">${es ? 'Precios en pesos dominicanos. 18% de impuestos y 10% de servicio no incluidos.' : 'Prices in Dominican pesos. 18% tax and 10% service charge not included.'}</p>`}
+      <div class="dm__cta">
+        <a class="btn" href="${wa}" target="_blank" rel="noopener">${es ? 'Reservar mesa' : 'Book a table'}</a>
+        <a class="btn btn--ghost" href="https://onnosdr.com/las-terrenas/menu" target="_blank" rel="noopener">${es ? 'Menú completo' : 'Full menu'}</a>
+      </div>`;
+  };
+  const dmFill = (key, animate) => {
+    const apply = () => {
+      dmKey = key;
+      dmImg.src = dishes[key].img; dmImg.alt = dishes[key].name;
+      dmContent.innerHTML = dmHTML(key); dmContent.scrollTop = 0;
+      dmCount.textContent = `${pad(dishOrder.indexOf(key) + 1)} / ${pad(dishOrder.length)}`;
+      requestAnimationFrame(() => { dmContent.classList.remove('is-swap'); dmImg.classList.remove('is-swap'); });
+    };
+    if (animate && !reduce) { dmContent.classList.add('is-swap'); dmImg.classList.add('is-swap'); setTimeout(apply, 260); } else apply();
+  };
+  let dmLastFocus = null;
+  const dmOpen = key => {
+    dmLastFocus = document.activeElement;
+    dmFill(key, false);
+    dm.classList.add('is-open'); dm.setAttribute('aria-hidden', 'false');
+    document.documentElement.style.overflow = 'hidden';
+    if (window.__lenis) window.__lenis.stop();
+    setTimeout(() => $('.dm__close', dm).focus({ preventScroll: true }), 50);
+  };
+  const dmClose = () => {
+    if (!dm.classList.contains('is-open')) return;
+    dm.classList.remove('is-open'); dm.setAttribute('aria-hidden', 'true');
+    document.documentElement.style.overflow = '';
+    if (window.__lenis) window.__lenis.start();
+    if (dmLastFocus) dmLastFocus.focus({ preventScroll: true });
+  };
+  const dmStep = dir => dmFill(dishOrder[(dishOrder.indexOf(dmKey) + dir + dishOrder.length) % dishOrder.length], true);
+  $$('.dish[data-dish]').forEach(el => {
+    el.addEventListener('click', () => dmOpen(el.dataset.dish));
+    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dmOpen(el.dataset.dish); } });
+  });
+  dm.addEventListener('click', e => { if (e.target.closest('[data-close]')) dmClose(); });
+  $('#dmPrev').addEventListener('click', () => dmStep(-1));
+  $('#dmNext').addEventListener('click', () => dmStep(1));
+  addEventListener('keydown', e => {
+    if (!dm.classList.contains('is-open')) return;
+    if (e.key === 'Escape') dmClose();
+    if (e.key === 'ArrowRight') dmStep(1);
+    if (e.key === 'ArrowLeft') dmStep(-1);
+  });
+  // swipe orizzontale sulla foto per cambiare piatto (telefono)
+  let dmSx = null;
+  $('.dm__img', dm).addEventListener('touchstart', e => dmSx = e.touches[0].clientX, { passive: true });
+  $('.dm__img', dm).addEventListener('touchend', e => {
+    if (dmSx === null) return; const d = e.changedTouches[0].clientX - dmSx; dmSx = null;
+    if (Math.abs(d) > 50) dmStep(d < 0 ? 1 : -1);
+  });
+  onLang.push(() => { if (dmKey && dm.classList.contains('is-open')) dmContent.innerHTML = dmHTML(dmKey); });
+
   /* ---------------- what's on ---------------- */
   // Programma settimanale ricavato dai volantini di Onno's Las Terrenas.
   const T = { sunset: { en: 'Sunset', es: 'Atardecer' }, night: { en: 'Night', es: 'Noche' }, day: { en: 'Daytime', es: 'De día' } };
@@ -362,7 +480,7 @@
     { k: 'mon', en: 'Monday', es: 'Lunes', hours: '4pm – 2am', posters: ['thumb/19.jpg'], photo: true, events: [
       { name: 'Sunset Hour', time: { en: '5 – 6pm', es: '5 – 6pm' }, text: { en: 'Doors open at 4pm. Watch the sun go down with special prices on selected drinks.', es: 'Abrimos a las 4pm. Mira la puesta de sol con precios especiales en bebidas seleccionadas.' } }] },
     { k: 'tue', en: 'Tuesday', es: 'Martes', hours: '10am – 2am', posters: ['img/13.jpg'], photo: true, events: [
-      { name: 'Tacos & Tequila Tuesday', time: { en: 'All day', es: 'Todo el día' }, text: { en: 'Street tacos and margaritas at $199. A legend at every Onno\'s.', es: 'Tacos callejeros y margaritas a $199. Una leyenda en cada Onno\'s.' } }] },
+      { name: 'Tacos & Tequila Tuesday', time: { en: '5 – 11pm', es: '5 – 11pm' }, text: { en: 'Tacos from RD$119, margaritas RD$229 and pitchers RD$1,299. A legend at every Onno\'s.', es: 'Tacos desde RD$119, margaritas a RD$229 y jarras a RD$1,299. Una leyenda en cada Onno\'s.' } }] },
     { k: 'wed', en: 'Wednesday', es: 'Miércoles', hours: '10am – 2am', posters: ['img/eventi/lets-smash.jpg', 'img/eventi/midweek-rhythms.jpg'], events: [
       { name: "Let's Smash", time: { en: 'From 11am', es: 'Desde las 11am' }, text: { en: 'Smash burgers $499 with fries or fried yuca, 2×1 Corona Cero. Classic Oklahoma, Jalapeño, Caramelized Onion, Bacon Cheeseburger, Shroom.', es: 'Smash burgers a $499 con papas o yuca frita, 2×1 de Corona Cero. Classic Oklahoma, Jalapeño, Caramelized Onion, Bacon Cheeseburger, Shroom.' } },
       { name: 'Midweek Rhythms', time: T.sunset, lineup: ['Yendruy Aquinx', 'Chrisoprasa'] }] },
@@ -448,10 +566,10 @@
     const follow = () => { cx += (tx - cx) * .2; cy += (ty - cy) * .2; cur.style.transform = `translate3d(${cx}px,${cy}px,0)`; requestAnimationFrame(follow); };
     follow();
     document.addEventListener('mouseover', e => {
-      const view = e.target.closest('.tile, .poster');
-      const soft = e.target.closest('.dish, .dn-card, a, button');
+      const view = e.target.closest('.tile, .poster, .dish');
+      const soft = e.target.closest('.dn-card, a, button');
       cur.classList.toggle('is-view', !!view);
-      label.textContent = view ? 'View' : '';
+      label.textContent = view ? (view.classList.contains('dish') ? 'Menu' : 'View') : '';
       cur.classList.toggle('is-hover', !view && !!soft);
     });
     $$('.magnetic').forEach(el => {
