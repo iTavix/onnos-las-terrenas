@@ -175,7 +175,7 @@ body.is-ready .hero__meta { opacity: .85; transform: none; }
 .stats span { font-size: 13px; color: var(--muted); }
 
 /* ---------- day to night ---------- */
-.daynight { position: relative; height: 400vh; background: var(--paper); }
+.daynight { position: relative; height: 250vh; background: var(--paper); }
 .daynight__sticky { position: sticky; top: 0; height: 100svh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; padding: 96px 0 40px; }
 .daynight__head { padding: 0 var(--gutter); margin-bottom: clamp(24px, 4vh, 48px); }
 .daynight__head .display { font-size: clamp(36px, 5vw, 80px); }
@@ -187,7 +187,27 @@ body.is-ready .hero__meta { opacity: .85; transform: none; }
 .dn-card__time { display: block; font-family: var(--serif); font-size: 28px; margin-top: 16px; color: var(--accent); }
 .dn-card h3 { font-weight: 500; font-size: 18px; margin-top: 2px; }
 .dn-card p { font-size: 14px; color: var(--muted); margin-top: 4px; }
-.daynight__bar { position: absolute; left: var(--gutter); right: var(--gutter); bottom: 28px; height: 1px; background: var(--line); }
+.daynight__foot { position: absolute; left: var(--gutter); right: var(--gutter); bottom: 24px; display: flex; align-items: center; gap: 20px; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.daynight__count { font-variant-numeric: tabular-nums; color: var(--fg); }
+.daynight__bar { position: relative; flex: 1; height: 1px; background: var(--line); }
+.daynight__hint { white-space: nowrap; color: var(--fg); transition: opacity .6s var(--ease); animation: hintBob 1.6s var(--ease) infinite; }
+.daynight__hint.is-gone { opacity: 0; animation: none; }
+@keyframes hintBob { 50% { transform: translate(var(--hx, 0), var(--hy, 4px)); } }
+
+/* telefono/tablet: carosello nativo con swipe, nessun blocco dello scroll verticale */
+html.dn-carousel .daynight { height: auto; }
+html.dn-carousel .daynight__sticky { position: relative; height: auto; overflow: visible; padding: clamp(80px, 14vw, 120px) 0 clamp(48px, 10vw, 80px); }
+html.dn-carousel .daynight__track {
+  overflow-x: auto; overflow-y: hidden; transform: none !important; will-change: auto;
+  scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+html.dn-carousel .daynight__track::-webkit-scrollbar { display: none; }
+html.dn-carousel .daynight__track::after { content: ""; flex: 0 0 1px; }
+html.dn-carousel .dn-card { flex-basis: min(78vw, 360px); scroll-snap-align: start; }
+html.dn-carousel .dn-card__img { max-height: none; }
+html.dn-carousel .daynight__foot { position: static; margin: 28px var(--gutter) 0; }
+html.dn-carousel .daynight__hint { --hx: 4px; --hy: 0; }
 .daynight__bar i { position: absolute; inset: 0; background: var(--fg); transform-origin: 0 50%; transform: scaleX(0); }
 
 /* ---------- kitchen ---------- */
@@ -441,7 +461,6 @@ body.is-ready .hero__meta { opacity: .85; transform: none; }
   .lb__nav { width: 44px; height: 44px; font-size: 20px; top: auto; bottom: 16px; transform: none; }
   .tuesday__price strong { font-size: 44px; }
   .masonry { columns: 2 140px; }
-  .dn-card { flex-basis: 74vw; }
   .dish figcaption { padding: 14px; }
   .dish figcaption span { font-size: 20px; }
 }

@@ -144,6 +144,28 @@
   // cosi' niente layout forzati e niente sfasamento tra scroll e trasformazioni.
   const nav = $('#nav'), progress = $('#progress'), hero = $('.hero'), heroContent = $('.hero__content');
   const marquee = $('#marquee'), dn = $('#daynight'), dnTrack = $('#dnTrack'), dnBar = $('#dnBar');
+  const dnCount = $('#dnCount'), dnHint = $('#dnHint'), dnN = $$('.dn-card').length;
+  // Su touch/schermi stretti la sezione e' un carosello nativo (swipe), su desktop resta "pinned".
+  const carouselMQ = matchMedia('(hover: none), (pointer: coarse), (max-width: 960px)');
+  let carousel = carouselMQ.matches, dnMoved = false, dnIdx = -1;
+  const setCarouselClass = () => {
+    document.documentElement.classList.toggle('dn-carousel', carousel);
+    if (carousel) dnTrack.setAttribute('data-lenis-prevent-wheel', ''); else dnTrack.removeAttribute('data-lenis-prevent-wheel');
+  };
+  setCarouselClass();
+  const setHint = () => {
+    const es = curLang === 'es';
+    dnHint.textContent = carousel ? (es ? 'Desliza →' : 'Swipe →') : (es ? 'Desliza ↓' : 'Scroll ↓');
+    dnHint.classList.toggle('is-gone', dnMoved);
+  };
+  const updateDn = p => {
+    dnBar.style.transform = `scaleX(${Math.round(p * 1000) / 1000})`;
+    const idx = Math.round(p * (dnN - 1)) + 1;
+    if (idx !== dnIdx) { dnIdx = idx; dnCount.textContent = `${pad(idx)} / ${pad(dnN)}`; }
+    if (!dnMoved && p > .02) { dnMoved = true; dnHint.classList.add('is-gone'); }
+  };
+  setHint();
+  onLang.push(setHint);
   const parallax = fine ? $$('[data-speed]') : [];
   const navLinks = $$('.nav__links > a');
   const sections = navLinks.map(a => $(a.getAttribute('href')));
@@ -169,6 +191,18 @@
   if (document.fonts) document.fonts.ready.then(measure);
   new ResizeObserver(measure).observe(document.body);
 
+  carouselMQ.addEventListener('change', () => {
+    carousel = carouselMQ.matches; setCarouselClass();
+    dnTrack.scrollLeft = 0; dnTrack.style.transform = ''; dnMoved = false; dnIdx = -1;
+    measure(); setHint(); updateDn(0); lastY = -1;
+  });
+  // carosello: avanzamento e contatore dallo scroll orizzontale nativo
+  dnTrack.addEventListener('scroll', () => {
+    if (!carousel) return;
+    const max = dnTrack.scrollWidth - dnTrack.clientWidth;
+    updateDn(max > 0 ? Math.min(1, dnTrack.scrollLeft / max) : 0);
+  }, { passive: true });
+
   let lenis = null;
   if (window.Lenis && !reduce) {
     lenis = new Lenis({ duration: 1.15, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
@@ -181,6 +215,20 @@
       lenis.scrollTo(t, { offset: 0 });
     }));
   }
+
+  // in ascolto sulla finestra: ai bordi della sezione il puntatore puo' essere gia' sopra la sezione vicina
+  addEventListener('wheel', e => {
+    if (carousel || Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+    const y = lenis ? lenis.scroll : scrollY;
+    const start = M.dnTop, end = M.dnTop + M.dnLen, edge = M.vh * .6;
+    if (y < start - edge - 4 || y > end + edge + 4) return;
+    e.preventDefault();
+    const ratio = M.dnMax > 0 ? M.dnLen / M.dnMax : 1;
+    const from = lenis ? (lenis.targetScroll ?? lenis.scroll) : y;
+    // oltre la prima/ultima card il gesto laterale accompagna la pagina fuori dalla sezione (max ~mezza schermata)
+    const target = Math.max(start - edge, Math.min(end + edge, from + e.deltaX * ratio));
+    if (lenis) lenis.scrollTo(target, { lerp: .12 }); else scrollTo(0, target);
+  }, { passive: false });
 
   let lastY = -1, mx = 0, vel = 0, navHidden = false, solid = null, curSec = -2;
   const setNavHidden = v => { if (v !== navHidden) { navHidden = v; nav.classList.toggle('is-hidden', v); } };
@@ -219,9 +267,11 @@
         }
       }
 
-      const p = Math.max(0, Math.min(1, (y - M.dnTop) / M.dnLen));
-      dnTrack.style.transform = `translate3d(${r2(-p * M.dnMax)}px,0,0)`;
-      dnBar.style.transform = `scaleX(${r2(p)})`;
+      if (!carousel) {
+        const p = Math.max(0, Math.min(1, (y - M.dnTop) / M.dnLen));
+        dnTrack.style.transform = `translate3d(${r2(-p * M.dnMax)}px,0,0)`;
+        updateDn(p);
+      }
     }
 
     if (!reduce) {
